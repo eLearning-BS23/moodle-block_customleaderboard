@@ -71,9 +71,11 @@ class block_customleaderboard_edit_form extends block_edit_form {
         $mform->addElement('html', '<div id="quizleaderboard_configs" style="display: none">');
         $mform->addElement('html', 'Columns:');
 
-        $mform->addElement('advcheckbox', 'config_quizavggrade', get_string('quizorderoption:grade', 'block_customleaderboard'), null,
+        $mform->addElement('advcheckbox', 'config_quizavggrade',
+        get_string('quizorderoption:grade', 'block_customleaderboard'), null,
         ['id' => 'id_config_quizavggrade']);
-        $mform->addElement('advcheckbox', 'config_quizavgtime', get_string('quizorderoption:finishtime', 'block_customleaderboard'), null,
+        $mform->addElement('advcheckbox', 'config_quizavgtime',
+        get_string('quizorderoption:finishtime', 'block_customleaderboard'), null,
         ['id' => 'id_config_quizavgtime']);
 
         $mform->addElement('html', '<div id="orderby_div" style="display: none">');
@@ -89,7 +91,8 @@ class block_customleaderboard_edit_form extends block_edit_form {
         $userfilteroptions["user_profile_field"] = get_string('userfilteroption:profilefield', 'block_customleaderboard');
 
         $mform->addElement('html', '<div id="userfilter_div" style="display: none">');
-        $mform->addElement('select', 'config_userfilter', get_string('userfilter:label', 'block_customleaderboard'), $userfilteroptions,
+        $mform->addElement('select', 'config_userfilter',
+        get_string('userfilter:label', 'block_customleaderboard'), $userfilteroptions,
         ['id' => 'id_config_userfilter']);
         $mform->addElement('html', '</div>');
 
@@ -101,8 +104,10 @@ class block_customleaderboard_edit_form extends block_edit_form {
             $fieldarray[$row->id] = $row->shortname;
         }
         $mform->addElement('html', '<div id="userfield_div" style="display: none">');
-        $mform->addElement('select', 'config_userfield', get_string('userfilter:userfield', 'block_customleaderboard'), $fieldarray);
-        $mform->addElement('text', 'config_userfieldvalue', get_string('userfilter:fieldvalue', 'block_customleaderboard'));
+        $mform->addElement('select', 'config_userfield',
+        get_string('userfilter:userfield', 'block_customleaderboard'), $fieldarray);
+        $mform->addElement('text', 'config_userfieldvalue',
+        get_string('userfilter:fieldvalue', 'block_customleaderboard'));
         $mform->addElement('html', '</div>');
         // End of user filter configs.
 
@@ -113,7 +118,8 @@ class block_customleaderboard_edit_form extends block_edit_form {
         $datalimitoptions[20] = get_string('datalimitoption:top20', 'block_customleaderboard');
         $datalimitoptions[1] = get_string('datalimitoption:all', 'block_customleaderboard');
 
-        $mform->addElement('select', 'config_datalimit', get_string('datalimitlabel', 'block_customleaderboard'), $datalimitoptions);
+        $mform->addElement('select', 'config_datalimit',
+        get_string('datalimitlabel', 'block_customleaderboard'), $datalimitoptions);
 
         $mform->addElement('header', 'config_styleheader', 'Custom CSS style variables');
 

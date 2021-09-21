@@ -23,8 +23,10 @@
 define(['jquery'], function($) {
     return {
         init: function() {
-            // console.log('configure block js loaded test');
-            // show courseleaderboard inputs if the leaderboard type is course leaderboard
+            /**
+             * Manage User field.
+             *
+             */
             function manageUserField(){
                 var userfilter = $( "#id_config_userfilter :selected" ).val();
                 if(userfilter == "user_profile_field"){
@@ -36,25 +38,31 @@ define(['jquery'], function($) {
             }
 
 
+            /**
+             * Manage Order By.
+             *
+             */
             function manageOrderBy(){
                 var gradechecked = document.getElementById('id_config_quizavggrade').checked;
                 var timechecked = document.getElementById('id_config_quizavgtime').checked;
 
                 if(gradechecked && timechecked){
-                    // console.log("both checked");
                     document.getElementById('orderby_div').style.display = 'block';
                 }
                 else{
-                    // console.log("not both checked");
                     document.getElementById('orderby_div').style.display = 'none';
                 }
             }
 
+
+            /**
+             * Manage Leaderboard Type.
+             *
+             */
             function manageLeaderBoardType(){
                 var leaderboardtype = $( "#id_config_leaderboardtype :selected" ).val();
                 switch (leaderboardtype) {
                     case "coursetotal":
-                        console.log("courseleader board");
                         document.getElementById('courseleaderboard_configs').style.display = 'block';
                         document.getElementById('quizleaderboard_configs').style.display = 'none';
                         document.getElementById('orderby_div').style.display = 'none';
@@ -62,7 +70,6 @@ define(['jquery'], function($) {
                         manageUserField();
                         break;
                     case "enrollment":
-                        console.log("quizleader board");
                         document.getElementById('courseleaderboard_configs').style.display = 'none';
                         document.getElementById('quizleaderboard_configs').style.display = 'none';
                         document.getElementById('orderby_div').style.display = 'none';
@@ -70,7 +77,6 @@ define(['jquery'], function($) {
                         document.getElementById('userfield_div').style.display = 'none';
                         break;
                     case "discussionpost":
-                        console.log("discussion board");
                         document.getElementById('courseleaderboard_configs').style.display = 'none';
                         document.getElementById('quizleaderboard_configs').style.display = 'none';
                         document.getElementById('orderby_div').style.display = 'none';
@@ -78,7 +84,6 @@ define(['jquery'], function($) {
                         manageUserField();
                         break;
                     case "quizleaderboard":
-                        console.log("quizleader board");
                         document.getElementById('courseleaderboard_configs').style.display = 'none';
                         document.getElementById('quizleaderboard_configs').style.display = 'block';
                         manageOrderBy();
@@ -86,7 +91,6 @@ define(['jquery'], function($) {
                         manageUserField();
                         break;
                     default:
-                        console.log("invalid leaderboard type");
                         break;
                 }
             }
