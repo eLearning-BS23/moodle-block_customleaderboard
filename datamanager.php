@@ -60,7 +60,7 @@ class datamanager {
 
     /**
      * Return data for All course leaderboard
-     *
+     * @param int $datalimit Shows the data limit of query
      * @return Array of stdClass
      */
     public function get_enrollment_data ($datalimit) {
@@ -85,6 +85,8 @@ class datamanager {
     /**
      * Return data for course leaderboard
      * @param int $courseid specific course id
+     * @param int $datalimit Shows the data limit of query
+     * @param Array $userfilterdata denotes user filter logic
      * @return Array of stdClass
      */
     public function get_course_leaderboard_data ($courseid, $datalimit, $userfilterdata) {
@@ -155,7 +157,7 @@ class datamanager {
 
     /**
      * Return query parts for userfilter
-     * @param $userfilterdata Array array of stdclass objects
+     * @param Array $userfilterdata denotes user filter logic
      * @return Array of string containing query parts
      */
     public function get_user_filter_query_part ($userfilterdata) {
@@ -188,6 +190,7 @@ class datamanager {
     /**
      * Return data for discussion post leaderboard
      * @param int $datalimit Query row limit
+     * @param Array $userfilterdata denotes user filter logic
      * @return Array of stdClass
      */
     public function get_discussion_post_data ($datalimit, $userfilterdata) {
@@ -224,6 +227,10 @@ class datamanager {
     /**
      * Return data for discussion post leaderboard
      * @param int $datalimit Query row limit
+     * @param int $quizgradecolumn denotes if grade column should be included
+     * @param int $quiztimecolumn denotes if time column should be included
+     * @param String $orderby set query order by
+     * @param Array $userfilterdata denotes user filter logic
      * @return Array of stdClass
      */
     public function get_quiz_data ($datalimit, $quizgradecolumn, $quiztimecolumn, $orderby, $userfilterdata) {
