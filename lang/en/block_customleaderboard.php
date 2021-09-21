@@ -15,16 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Lang strings for block_leaderboard
+ * Lang strings for block_customleaderboard
  *
- * @package    block_leaderboard
+ * @package    block_customleaderboard
  * @copyright  2021 Brainstation23
  * @author     2021 Brainstation23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Leaderboard';
-$string['leaderboard'] = 'Leaderboard';
+$string['pluginname'] = 'Custom Leaderboard';
+$string['leaderboard'] = 'Custom Leaderboard';
 $string['leaderboard:addinstance'] = 'Add a new Leaderboard block';
 $string['leaderboard:myaddinstance'] = 'Add a new Leaderboard block to the My Moodle page';
 $string['blockstring'] = 'Heading message:';

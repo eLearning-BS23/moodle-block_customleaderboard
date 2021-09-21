@@ -17,7 +17,7 @@
 /**
  * Content Box block
  *
- * @package    block_leaderboard
+ * @package    block_customleaderboard
  * @copyright  2021 Brainstation23
  * @author     Brainstation23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -33,18 +33,18 @@ require_once(__DIR__ . '/datamanager.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-class block_leaderboard extends block_base {
+class block_customleaderboard extends block_base {
 
     /**
      * Initialize.
      *
      */
     public function init() {
-        $this->title = get_string('leaderboard', 'block_leaderboard');
+        $this->title = get_string('leaderboard', 'block_customleaderboard');
     }
 
     /**
-     * Return contents of block_leaderboard block
+     * Return contents of block_customleaderboard block
      *
      * @return stdClass contents of block
      */
@@ -58,7 +58,7 @@ class block_leaderboard extends block_base {
     }
 
     /**
-     * Make custom content for block_leaderboard block
+     * Make custom content for block_customleaderboard block
      *
      * @return String
      */
@@ -73,10 +73,10 @@ class block_leaderboard extends block_base {
             } else if ($this->config->leaderboardtype == 'quizleaderboard') {
                 return $this->make_quiz_table();
             } else {
-                return get_string('leaderboardtypewarning', 'block_leaderboard');
+                return get_string('leaderboardtypewarning', 'block_customleaderboard');
             }
         } else {
-            return get_string('leaderboardtypewarning', 'block_leaderboard');
+            return get_string('leaderboardtypewarning', 'block_customleaderboard');
         }
     }
 
@@ -104,9 +104,9 @@ class block_leaderboard extends block_base {
         $userfilterdata['userfieldvalue'] = $userfieldvalue;
 
         $data = $datamanager->get_quiz_data($datalimit, $quizgradecolumn, $quiztimecolumn, $orderby, $userfilterdata);
-        $usernamelabel = get_string('tblcourseleader:username', 'block_leaderboard');
-        $avgtimelabel = get_string('quiztable:avgtime', 'block_leaderboard');
-        $avggradelabel = get_string('quiztable:avggrade', 'block_leaderboard');
+        $usernamelabel = get_string('tblcourseleader:username', 'block_customleaderboard');
+        $avgtimelabel = get_string('quiztable:avgtime', 'block_customleaderboard');
+        $avggradelabel = get_string('quiztable:avggrade', 'block_customleaderboard');
 
         $responsehtml = "";
         if ($quizgradecolumn == 1 && $quiztimecolumn == 0) {
@@ -153,7 +153,7 @@ class block_leaderboard extends block_base {
             $this->add_custom_css($table, $rowcount);
             $responsehtml = html_writer::table($table);
         } else {
-            $responsehtml = get_string('quiz:invalidcolumnlist', 'block_leaderboard');
+            $responsehtml = get_string('quiz:invalidcolumnlist', 'block_customleaderboard');
         }
         return $responsehtml;
     }
@@ -178,8 +178,8 @@ class block_leaderboard extends block_base {
 
         $data = $datamanager->get_discussion_post_data($datalimit, $userfilterdata);
 
-        $userlabel = get_string('tblcourseleader:username', 'block_leaderboard');
-        $postlabel = get_string('tbldiscussion:postcount', 'block_leaderboard');
+        $userlabel = get_string('tblcourseleader:username', 'block_customleaderboard');
+        $postlabel = get_string('tbldiscussion:postcount', 'block_customleaderboard');
 
         $headings = array($userlabel, $postlabel);
         $align = array('left');
@@ -219,16 +219,16 @@ class block_leaderboard extends block_base {
                 $userfilterdata['userfieldvalue'] = $userfieldvalue;
                 $coursedata = $datamanager->get_course_leaderboard_data($courseid, $datalimit, $userfilterdata);
             } else {
-                return get_string('leaderboardtypewarning', 'block_leaderboard');
+                return get_string('leaderboardtypewarning', 'block_customleaderboard');
             }
         } else {
-            return get_string('leaderboardtypewarning', 'block_leaderboard');
+            return get_string('leaderboardtypewarning', 'block_customleaderboard');
         }
 
         if ($courseid == 0) {
             // Make HTML table.
-            $userlabel = get_string('tblcourseleader:username', 'block_leaderboard');
-            $gradelabel = get_string('tblcourseleader:grade', 'block_leaderboard');
+            $userlabel = get_string('tblcourseleader:username', 'block_customleaderboard');
+            $gradelabel = get_string('tblcourseleader:grade', 'block_customleaderboard');
 
             $headings = array($userlabel, $gradelabel);
             $align = array('left');
@@ -247,8 +247,8 @@ class block_leaderboard extends block_base {
             return html_writer::table($table);
         } else {
             // Make HTML table.
-            $userlabel = get_string('tblcourseleader:username', 'block_leaderboard');
-            $gradelabel = get_string('tblcourseleader:grade', 'block_leaderboard');
+            $userlabel = get_string('tblcourseleader:username', 'block_customleaderboard');
+            $gradelabel = get_string('tblcourseleader:grade', 'block_customleaderboard');
 
             $headings = array($userlabel, $gradelabel);
             $align = array('left');
@@ -264,7 +264,7 @@ class block_leaderboard extends block_base {
                 $grade = $this->round_two_decimal($row->grade);
                 $table->data[] = array ($row->display_name, $grade);
             }
-            $courselabel = get_string('tblenrollment:coursename', 'block_leaderboard');
+            $courselabel = get_string('tblenrollment:coursename', 'block_customleaderboard');
             $html = "<p>$courselabel: $coursename</p>";
             $html = $html.html_writer::table($table);
 
@@ -283,8 +283,8 @@ class block_leaderboard extends block_base {
         $datalimit = $this->config->datalimit;
         $datamanager = new datamanager();
         $enrolldata = $datamanager->get_enrollment_data($datalimit);
-        $coursenamelabel = get_string('tblenrollment:coursename', 'block_leaderboard');
-        $enrolleduserlabel = get_string('tblenrollment:enrollment', 'block_leaderboard');
+        $coursenamelabel = get_string('tblenrollment:coursename', 'block_customleaderboard');
+        $enrolleduserlabel = get_string('tblenrollment:enrollment', 'block_customleaderboard');
         $headings = array($coursenamelabel, $enrolleduserlabel);
         $align = array('left');
 
@@ -313,7 +313,7 @@ class block_leaderboard extends block_base {
             }
 
             if (empty($this->config->msg)) {
-                $this->config->msg = get_string('defaulttext', 'block_leaderboard');
+                $this->config->msg = get_string('defaulttext', 'block_customleaderboard');
             }
         }
     }

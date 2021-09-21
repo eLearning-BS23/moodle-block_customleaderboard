@@ -16,7 +16,7 @@
 /**
  * Configure block js
  *
- * @module     block_leaderboard
+ * @module     block_customleaderboard
  * @copyright  2021 Brainstation23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

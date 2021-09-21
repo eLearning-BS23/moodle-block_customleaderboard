@@ -1,6 +1,6 @@
-# Moodle Block Leader Board
+# Custom Block Leader Board
 
-Moodle Block Leaderboard plugin is a block plugin in moodle. It shows leaderboard / ranking board based on different types. 
+Custom Block Leaderboard plugin is a block plugin in moodle. It shows leaderboard / ranking board based on different types. 
 
 # Leaderboard Types
 

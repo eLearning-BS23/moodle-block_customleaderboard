@@ -17,13 +17,13 @@
 /**
  * Edit form class
  *
- * @package    block_leaderboard
+ * @package    block_customleaderboard
  * @copyright  2021 Brainstation23
  * @author     Brainstation23
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-class block_leaderboard_edit_form extends block_edit_form {
+class block_customleaderboard_edit_form extends block_edit_form {
 
     /**
      * Adds configuration fields in edit configuration for the block
@@ -32,23 +32,23 @@ class block_leaderboard_edit_form extends block_edit_form {
      */
     protected function specific_definition ($mform) {
         global $DB, $PAGE;
-        $PAGE->requires->js_call_amd('block_leaderboard/configure_block', 'init', array());
+        $PAGE->requires->js_call_amd('block_customleaderboard/configure_block', 'init', array());
         // Section header title according to language file.
         $mform->addElement('header', 'config_header', get_string('blocksettings', 'block'));
 
         // A sample string variable with a default value.
-        $mform->addElement('text', 'config_msg', get_string('blockstring', 'block_leaderboard'));
+        $mform->addElement('text', 'config_msg', get_string('blockstring', 'block_customleaderboard'));
         $mform->setDefault('config_msg', 'test msg');
         $mform->setType('config_msg', PARAM_RAW);
 
         $leaderboardtype = array();
-        $leaderboardtype[""] = get_string('leaderboardtype:select', 'block_leaderboard');
-        $leaderboardtype["coursetotal"] = get_string('leaderboardtype:coursetotal', 'block_leaderboard');
-        $leaderboardtype["enrollment"] = get_string('leaderboardtype:enrollment', 'block_leaderboard');
-        $leaderboardtype["discussionpost"] = get_string('leaderboardtype:discussionpost', 'block_leaderboard');
-        $leaderboardtype["quizleaderboard"] = get_string('leaderboardtype:quizleaderboard', 'block_leaderboard');
+        $leaderboardtype[""] = get_string('leaderboardtype:select', 'block_customleaderboard');
+        $leaderboardtype["coursetotal"] = get_string('leaderboardtype:coursetotal', 'block_customleaderboard');
+        $leaderboardtype["enrollment"] = get_string('leaderboardtype:enrollment', 'block_customleaderboard');
+        $leaderboardtype["discussionpost"] = get_string('leaderboardtype:discussionpost', 'block_customleaderboard');
+        $leaderboardtype["quizleaderboard"] = get_string('leaderboardtype:quizleaderboard', 'block_customleaderboard');
 
-        $mform->addElement('select', 'config_leaderboardtype', get_string('leaderboardtype', 'block_leaderboard'),
+        $mform->addElement('select', 'config_leaderboardtype', get_string('leaderboardtype', 'block_customleaderboard'),
         $leaderboardtype, ['id' => 'id_config_leaderboardtype']);
 
         $coursesql = "SELECT * FROM {course} WHERE format != 'site'";
@@ -61,23 +61,23 @@ class block_leaderboard_edit_form extends block_edit_form {
         }
 
         $mform->addElement('html', '<div id="courseleaderboard_configs" style="display: none">');
-        $mform->addElement('select', 'config_courseid', get_string('config:courseselect', 'block_leaderboard'), $coursearray);
+        $mform->addElement('select', 'config_courseid', get_string('config:courseselect', 'block_customleaderboard'), $coursearray);
         $mform->addElement('html', '</div>');
 
         $quizorderbyoptions = array();
-        $quizorderbyoptions["avg_grade"] = get_string('quizorderoption:grade', 'block_leaderboard');
-        $quizorderbyoptions["avg_finishtime"] = get_string('quizorderoption:finishtime', 'block_leaderboard');
+        $quizorderbyoptions["avg_grade"] = get_string('quizorderoption:grade', 'block_customleaderboard');
+        $quizorderbyoptions["avg_finishtime"] = get_string('quizorderoption:finishtime', 'block_customleaderboard');
 
         $mform->addElement('html', '<div id="quizleaderboard_configs" style="display: none">');
         $mform->addElement('html', 'Columns:');
 
-        $mform->addElement('advcheckbox', 'config_quizavggrade', get_string('quizorderoption:grade', 'block_leaderboard'), null,
+        $mform->addElement('advcheckbox', 'config_quizavggrade', get_string('quizorderoption:grade', 'block_customleaderboard'), null,
         ['id' => 'id_config_quizavggrade']);
-        $mform->addElement('advcheckbox', 'config_quizavgtime', get_string('quizorderoption:finishtime', 'block_leaderboard'), null,
+        $mform->addElement('advcheckbox', 'config_quizavgtime', get_string('quizorderoption:finishtime', 'block_customleaderboard'), null,
         ['id' => 'id_config_quizavgtime']);
 
         $mform->addElement('html', '<div id="orderby_div" style="display: none">');
-        $mform->addElement('select', 'config_quizorderby', get_string('quizorderby:label', 'block_leaderboard'),
+        $mform->addElement('select', 'config_quizorderby', get_string('quizorderby:label', 'block_customleaderboard'),
         $quizorderbyoptions);
         $mform->addElement('html', '</div>');
 
@@ -85,11 +85,11 @@ class block_leaderboard_edit_form extends block_edit_form {
 
         // User filter configs.
         $userfilteroptions = array();
-        $userfilteroptions["none"] = get_string('userfilteroption:none', 'block_leaderboard');
-        $userfilteroptions["user_profile_field"] = get_string('userfilteroption:profilefield', 'block_leaderboard');
+        $userfilteroptions["none"] = get_string('userfilteroption:none', 'block_customleaderboard');
+        $userfilteroptions["user_profile_field"] = get_string('userfilteroption:profilefield', 'block_customleaderboard');
 
         $mform->addElement('html', '<div id="userfilter_div" style="display: none">');
-        $mform->addElement('select', 'config_userfilter', get_string('userfilter:label', 'block_leaderboard'), $userfilteroptions,
+        $mform->addElement('select', 'config_userfilter', get_string('userfilter:label', 'block_customleaderboard'), $userfilteroptions,
         ['id' => 'id_config_userfilter']);
         $mform->addElement('html', '</div>');
 
@@ -101,19 +101,19 @@ class block_leaderboard_edit_form extends block_edit_form {
             $fieldarray[$row->id] = $row->shortname;
         }
         $mform->addElement('html', '<div id="userfield_div" style="display: none">');
-        $mform->addElement('select', 'config_userfield', get_string('userfilter:userfield', 'block_leaderboard'), $fieldarray);
-        $mform->addElement('text', 'config_userfieldvalue', get_string('userfilter:fieldvalue', 'block_leaderboard'));
+        $mform->addElement('select', 'config_userfield', get_string('userfilter:userfield', 'block_customleaderboard'), $fieldarray);
+        $mform->addElement('text', 'config_userfieldvalue', get_string('userfilter:fieldvalue', 'block_customleaderboard'));
         $mform->addElement('html', '</div>');
         // End of user filter configs.
 
         $datalimitoptions = array();
-        $datalimitoptions[""] = get_string('leaderboardtype:select', 'block_leaderboard');
-        $datalimitoptions[5] = get_string('datalimitoption:top5', 'block_leaderboard');
-        $datalimitoptions[10] = get_string('datalimitoption:top10', 'block_leaderboard');
-        $datalimitoptions[20] = get_string('datalimitoption:top20', 'block_leaderboard');
-        $datalimitoptions[1] = get_string('datalimitoption:all', 'block_leaderboard');
+        $datalimitoptions[""] = get_string('leaderboardtype:select', 'block_customleaderboard');
+        $datalimitoptions[5] = get_string('datalimitoption:top5', 'block_customleaderboard');
+        $datalimitoptions[10] = get_string('datalimitoption:top10', 'block_customleaderboard');
+        $datalimitoptions[20] = get_string('datalimitoption:top20', 'block_customleaderboard');
+        $datalimitoptions[1] = get_string('datalimitoption:all', 'block_customleaderboard');
 
-        $mform->addElement('select', 'config_datalimit', get_string('datalimitlabel', 'block_leaderboard'), $datalimitoptions);
+        $mform->addElement('select', 'config_datalimit', get_string('datalimitlabel', 'block_customleaderboard'), $datalimitoptions);
 
         $mform->addElement('header', 'config_styleheader', 'Custom CSS style variables');
 
