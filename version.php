@@ -17,5 +17,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_customleaderboard';
+$plugin->release = '1.0.0';
 $plugin->version = 2021090600;
 $plugin->requires = 2010112400;
