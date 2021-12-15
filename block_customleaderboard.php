@@ -24,7 +24,6 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
-require_once(__DIR__ . '/datamanager.php');
 /**
  * This block simply outputs the Benefits Spots.
  *
@@ -52,7 +51,7 @@ class block_customleaderboard extends block_base {
         if ($this->content !== null) {
             return $this->content;
         }
-        $this->content = new stdClass;
+        $this->content = new stdClass();
         $this->content->text = $this->make_custom_content();
         return $this->content;
     }
@@ -86,7 +85,7 @@ class block_customleaderboard extends block_base {
      * @return String
      */
     public function make_quiz_table() {
-        $datamanager = new datamanager();
+        $datamanager = new block_customleaderboard\external\datamanager();
         $datalimit = $this->config->datalimit;
 
         $quizgradecolumn = $this->config->quizavggrade;
@@ -112,7 +111,7 @@ class block_customleaderboard extends block_base {
         if ($quizgradecolumn == 1 && $quiztimecolumn == 0) {
             $headings = array($usernamelabel, $avggradelabel);
             $align = array('left');
-            $table = new html_table();
+            $table = new \html_table();
             $table->head = $headings;
             $table->align = $align;
 
@@ -126,7 +125,7 @@ class block_customleaderboard extends block_base {
         } else if ($quizgradecolumn == 0 && $quiztimecolumn == 1) {
             $headings = array($usernamelabel, $avgtimelabel);
             $align = array('left');
-            $table = new html_table();
+            $table = new \html_table();
             $table->head = $headings;
             $table->align = $align;
 
@@ -140,7 +139,7 @@ class block_customleaderboard extends block_base {
         } else if ($quizgradecolumn == 1 && $quiztimecolumn == 1) {
             $headings = array($usernamelabel, $avgtimelabel, $avggradelabel);
             $align = array('left');
-            $table = new html_table();
+            $table = new \html_table();
             $table->head = $headings;
             $table->align = $align;
 
@@ -164,7 +163,7 @@ class block_customleaderboard extends block_base {
      * @return String
      */
     public function make_discussion_post_table() {
-        $datamanager = new datamanager();
+        $datamanager = new block_customleaderboard\external\datamanager();
         $datalimit = $this->config->datalimit;
         // User filter.
         $userfilter = $this->config->userfilter;
@@ -184,7 +183,7 @@ class block_customleaderboard extends block_base {
         $headings = array($userlabel, $postlabel);
         $align = array('left');
 
-        $table = new html_table();
+        $table = new \html_table();
         $table->head = $headings;
         $table->align = $align;
 
@@ -202,7 +201,7 @@ class block_customleaderboard extends block_base {
      * @return String
      */
     public function make_course_leaderboard_table() {
-        $datamanager = new datamanager();
+        $datamanager = new block_customleaderboard\external\datamanager();
         $datalimit = $this->config->datalimit;
         $courseid = $this->config->courseid;
         $coursedata = array();
@@ -233,7 +232,7 @@ class block_customleaderboard extends block_base {
             $headings = array($userlabel, $gradelabel);
             $align = array('left');
 
-            $table = new html_table();
+            $table = new \html_table();
             $table->head = $headings;
             $table->align = $align;
 
@@ -253,7 +252,7 @@ class block_customleaderboard extends block_base {
             $headings = array($userlabel, $gradelabel);
             $align = array('left');
 
-            $table = new html_table();
+            $table = new \html_table();
             $table->head = $headings;
             $table->align = $align;
 
@@ -281,14 +280,14 @@ class block_customleaderboard extends block_base {
      */
     public function make_enrollment_table() {
         $datalimit = $this->config->datalimit;
-        $datamanager = new datamanager();
+        $datamanager = new block_customleaderboard\external\datamanager();
         $enrolldata = $datamanager->get_enrollment_data($datalimit);
         $coursenamelabel = get_string('tblenrollment:coursename', 'block_customleaderboard');
         $enrolleduserlabel = get_string('tblenrollment:enrollment', 'block_customleaderboard');
         $headings = array($coursenamelabel, $enrolleduserlabel);
         $align = array('left');
 
-        $table = new html_table();
+        $table = new \html_table();
         $table->head = $headings;
         $table->align = $align;
         $rowcount = count($enrolldata);

@@ -27,40 +27,36 @@ define(['jquery'], function($) {
              * Manage User field.
              *
              */
-            function manageUserField(){
-                var userfilter = $( "#id_config_userfilter :selected" ).val();
-                if(userfilter == "user_profile_field"){
+            function manageUserField() {
+                var userfilter = $("#id_config_userfilter :selected").val();
+                if (userfilter == "user_profile_field") {
                     document.getElementById('userfield_div').style.display = 'block';
-                }
-                else{
+                } else {
                     document.getElementById('userfield_div').style.display = 'none';
                 }
             }
-
-
+            
             /**
              * Manage Order By.
              *
              */
-            function manageOrderBy(){
+            function manageOrderBy() {
                 var gradechecked = document.getElementById('id_config_quizavggrade').checked;
                 var timechecked = document.getElementById('id_config_quizavgtime').checked;
 
-                if(gradechecked && timechecked){
+                if (gradechecked && timechecked) {
                     document.getElementById('orderby_div').style.display = 'block';
-                }
-                else{
+                } else {
                     document.getElementById('orderby_div').style.display = 'none';
                 }
             }
-
-
+            
             /**
              * Manage Leaderboard Type.
              *
              */
-            function manageLeaderBoardType(){
-                var leaderboardtype = $( "#id_config_leaderboardtype :selected" ).val();
+            function manageLeaderBoardType() {
+                var leaderboardtype = $("#id_config_leaderboardtype :selected").val();
                 switch (leaderboardtype) {
                     case "coursetotal":
                         document.getElementById('courseleaderboard_configs').style.display = 'block';
@@ -97,7 +93,7 @@ define(['jquery'], function($) {
 
             manageLeaderBoardType();
 
-            $('#id_config_leaderboardtype').on('change', function() {
+            $('#id_config_leaderboardtype').on('change', function () {
                 manageLeaderBoardType();
             });
 

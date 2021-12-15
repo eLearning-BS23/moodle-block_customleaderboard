@@ -14,6 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
+/**
+ * This block simply outputs the data.
+ *
+ * @copyright  2021 Brainstation23
+ * @author     Brainstation23
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+namespace block_customleaderboard\external;
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * This block simply outputs the data.
  *
@@ -48,7 +59,7 @@ class datamanager {
         $userids = array_unique($userids);
         $responsedata = array();
         foreach ($userids as $id) {
-            $temprow = new stdClass();
+            $temprow = new \stdClass();
             $temprow->userid = $id;
             $temprow->display_name = $usernamedictionary[$id];
             $temprow->grade = $usermarksdictionary[$id];
@@ -66,11 +77,11 @@ class datamanager {
     public function get_enrollment_data ($datalimit) {
         global $DB;
         $limit = $this->return_data_limit($datalimit);
-        $enrollmentsql = "SELECT c.fullname, COUNT(ue.id) AS enroled_count
+        $enrollmentsql = "SELECT c.id, c.fullname, COUNT(ue.id) AS enroled_count
                         FROM {course} c
                         JOIN {enrol} en ON en.courseid = c.id
                         JOIN {user_enrolments} ue ON ue.enrolid = en.id
-                        GROUP BY c.id
+                        GROUP BY c.id, c.fullname
                         ORDER BY enroled_count DESC ".$limit;
         $enrolldata = $DB->get_recordset_sql($enrollmentsql);
 
@@ -96,53 +107,60 @@ class datamanager {
         $queryparts = $this->get_user_filter_query_part($userfilterdata);
         if ($courseid == 0) {
             $sql = "SELECT "
-                    ." ut.id AS 'userid',"
-                    ." ut.firstname AS 'first', ut.lastname AS 'last', CONCAT(ut.firstname , ' ' , ut.lastname) AS 'display_name',"
-                    ." c.fullname AS 'course', c.id AS 'courseid', cc.name AS 'category',"
-                    ." CASE WHEN gi.itemtype = 'course' THEN CONCAT(c.fullname, ' - Total') ELSE gi.itemname END AS 'item_name',"
-                    ." ROUND(gg.finalgrade,2) AS grade, "
-                    ." FROM_UNIXTIME(gg.timemodified) AS modified_time"
-                    ." FROM mdl_course c "
-                    ." JOIN mdl_context ctx ON c.id = ctx.instanceid"
-                    ." JOIN mdl_role_assignments ra ON ra.contextid = ctx.id"
-                    ." JOIN mdl_user ut ON ut.id = ra.userid"
-                    ." JOIN mdl_grade_grades gg ON gg.userid = ut.id"
-                    ." JOIN mdl_grade_items gi ON gi.id = gg.itemid"
-                    ." JOIN mdl_course_categories cc ON cc.id = c.category "
+                    ." ut.id AS userid,"
+                    ." ut.firstname AS first, ut.lastname AS last, ut.firstname AS display_name,"
+                    ." c.fullname AS course, c.id AS courseid, cc.name AS category,"
+                    ." gg.finalgrade AS grade, "
+                    ." gg.timemodified AS modified_time, "
+                    ." CASE WHEN gi.itemtype =:coursestring2 THEN c.fullname ELSE gi.itemname END AS item_name"
+                    ." FROM {course} c "
+                    ." JOIN {context} ctx ON c.id = ctx.instanceid"
+                    ." JOIN {role_assignments} ra ON ra.contextid = ctx.id"
+                    ." JOIN {user} ut ON ut.id = ra.userid"
+                    ." JOIN {grade_grades} gg ON gg.userid = ut.id"
+                    ." JOIN {grade_items} gi ON gi.id = gg.itemid"
+                    ." JOIN {course_categories} cc ON cc.id = c.category "
                 .$queryparts["join"]
-                ." WHERE  gi.courseid = c.id AND gi.itemtype = 'course' AND ".$queryparts["whereclause"]
+                ." WHERE  gi.courseid = c.id AND gi.itemtype = :coursestring1 AND ".$queryparts["whereclause"]
                 ." ORDER BY grade DESC ".$limit;
-
             if (count($queryparts["params"]) > 0) {
-                $data = $DB->get_recordset_sql($sql, $queryparts["params"]);
+                $params = $queryparts["params"];
+                $params["coursestring1"] = 'course';
+                $params["coursestring2"] = 'course';
+                $data = $DB->get_recordset_sql($sql, $params);
             } else {
-                $data = $DB->get_recordset_sql($sql);
+                $params = array();
+                $params["coursestring1"] = 'course';
+                $params["coursestring2"] = 'course';
+                $data = $DB->get_recordset_sql($sql, $params);
             }
         } else {
             $sql = " SELECT"
-                    ." ut.id AS 'userid',"
-                    ." ut.firstname AS 'first' ,"
-                    ." ut.lastname AS 'last',"
-                    ." CONCAT(ut.firstname , ' ' , ut.lastname) AS 'display_name',"
-                    ." c.fullname AS 'course',"
-                    ." c.id AS 'courseid',"
-                    ." cc.name AS 'category',"
-                    ." CASE WHEN gi.itemtype = 'course' THEN CONCAT(c.fullname, ' - Total') ELSE gi.itemname END AS 'item_name',"
-                    ." ROUND(gg.finalgrade,2) AS grade,"
-                    ." FROM_UNIXTIME(gg.timemodified) AS modified_time"
-                    ." FROM mdl_course c"
-                    ." JOIN mdl_context ctx ON c.id = ctx.instanceid"
-                    ." JOIN mdl_role_assignments ra ON ra.contextid = ctx.id"
-                    ." JOIN mdl_user ut ON ut.id = ra.userid"
-                    ." JOIN mdl_grade_grades gg ON gg.userid = ut.id"
-                    ." JOIN mdl_grade_items gi ON gi.id = gg.itemid"
-                    ." JOIN mdl_course_categories cc ON cc.id = c.category "
+                    ." ut.id AS userid,"
+                    ." ut.firstname AS first ,"
+                    ." ut.lastname AS last,"
+                    ." ut.firstname AS display_name,"
+                    ." c.fullname AS course,"
+                    ." c.id AS courseid,"
+                    ." cc.name AS category,"
+                    ." CASE WHEN gi.itemtype = :coursestring2 THEN c.fullname ELSE gi.itemname END AS item_name,"
+                    ." gg.finalgrade AS grade,"
+                    ." gg.timemodified AS modified_time"
+                    ." FROM {course} c"
+                    ." JOIN {context} ctx ON c.id = ctx.instanceid"
+                    ." JOIN {role_assignments} ra ON ra.contextid = ctx.id"
+                    ." JOIN {user} ut ON ut.id = ra.userid"
+                    ." JOIN {grade_grades} gg ON gg.userid = ut.id"
+                    ." JOIN {grade_items} gi ON gi.id = gg.itemid"
+                    ." JOIN {course_categories} cc ON cc.id = c.category "
                 .$queryparts["join"]
-                ." WHERE  gi.courseid = c.id AND gi.itemtype = 'course' AND c.id=:courseid AND ".$queryparts["whereclause"]
+                ." WHERE  gi.courseid = c.id AND gi.itemtype = :coursestring1 AND c.id=:courseid AND ".$queryparts["whereclause"]
                 ." ORDER BY grade DESC ".$limit;
 
             $paramsarray = $queryparts["params"];
             $paramsarray["courseid"] = $courseid;
+            $paramsarray["coursestring1"] = 'course';
+            $paramsarray["coursestring2"] = 'course';
 
             $data = $DB->get_recordset_sql($sql, $paramsarray);
         }
@@ -181,7 +199,7 @@ class datamanager {
             return $queryparts;
         } else {
             $queryparts["join"] = "";
-            $queryparts["whereclause"] = " 1 ";
+            $queryparts["whereclause"] = " true ";
             $queryparts["params"] = array();
             return $queryparts;
         }
@@ -202,13 +220,13 @@ class datamanager {
                 ." pt.userid,"
                 ." ut.firstname,"
                 ." ut.lastname,"
-                ." CONCAT(ut.firstname , ' ' , ut.lastname) AS 'displayname',"
+                ." ut.firstname AS displayname,"
                 ." COUNT(pt.id) postcount"
                 ." FROM {forum_posts} pt"
                 ." JOIN {user} ut ON ut.id = pt.userid"
                 .$queryparts["join"]
                 ." WHERE ".$queryparts["whereclause"]
-                ." GROUP BY pt.userid"
+                ." GROUP BY pt.userid,ut.firstname,ut.lastname,displayname "
                 ." ORDER BY postcount DESC ".$limit;
 
         if (count($queryparts["params"]) > 0) {
@@ -242,26 +260,26 @@ class datamanager {
                     ." mqg.userid, "
                     ." ut.firstname, "
                     ." ut.lastname, "
-                    ." CONCAT(ut.firstname , ' ' , ut.lastname) AS 'displayname', "
+                    ." ut.firstname AS displayname, "
                     ." AVG((mqg.grade)) avg_grade "
                     ." FROM {quiz_grades} mqg "
                     ." JOIN {user} ut ON mqg.userid = ut.id "
                     .$queryparts["join"]
                     ." WHERE ".$queryparts["whereclause"]
-                    ." GROUP BY mqg.userid"
+                    ." GROUP BY mqg.userid,ut.firstname,ut.lastname,displayname "
                     ." ORDER BY avg_grade DESC ".$limit;
         } else if ($quizgradecolumn == 0 && $quiztimecolumn == 1) {
             $sql = " SELECT "
                     ." mqa.userid, "
                     ." ut.firstname, "
                     ." ut.lastname, "
-                    ." CONCAT(ut.firstname , ' ' , ut.lastname) AS 'displayname', "
+                    ." ut.firstname AS displayname, "
                     ." AVG((mqa.timefinish-mqa.timestart)) avg_timediff "
                     ." FROM {quiz_attempts} mqa "
                     ." JOIN {user} ut ON mqa.userid = ut.id "
                     .$queryparts["join"]
                     ." WHERE ".$queryparts["whereclause"]
-                    ." GROUP BY mqa.userid"
+                    ." GROUP BY mqg.userid,ut.firstname,ut.lastname,displayname "
                     ." ORDER BY avg_timediff ASC ".$limit;
         } else if ($quizgradecolumn == 1 && $quiztimecolumn == 1) {
             if ($orderby == "avg_grade") {
@@ -275,7 +293,7 @@ class datamanager {
                     ." mqg.userid, "
                     ." ut.firstname, "
                     ." ut.lastname, "
-                    ." CONCAT(ut.firstname , ' ' , ut.lastname) AS 'displayname', "
+                    ." ut.firstname AS displayname, "
                     ." AVG((mqg.grade)) avg_grade, "
                     ." AVG((mqa.timefinish-mqa.timestart)) avg_timediff "
                     ." FROM {quiz_grades} mqg "
@@ -283,7 +301,7 @@ class datamanager {
                     ." JOIN {user} ut ON mqg.userid = ut.id "
                     .$queryparts["join"]
                     ." WHERE ".$queryparts["whereclause"]
-                    ." GROUP BY mqg.userid ".$orderbysql." ".$limit;
+                    ." GROUP BY mqg.userid,ut.firstname,ut.lastname,displayname ".$orderbysql." ".$limit;
         } else {
             return array();
         }
