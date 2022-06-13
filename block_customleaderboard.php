@@ -24,6 +24,8 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
+
+require_once(__DIR__ . '/lib.php');
 /**
  * This block simply outputs the Benefits Spots.
  *
@@ -85,7 +87,6 @@ class block_customleaderboard extends block_base {
      * @return String
      */
     public function make_quiz_table() {
-        $datamanager = new block_customleaderboard\external\datamanager();
         $datalimit = $this->config->datalimit;
 
         $quizgradecolumn = $this->config->quizavggrade;
@@ -102,7 +103,8 @@ class block_customleaderboard extends block_base {
         $userfilterdata['userfield'] = $userfield;
         $userfilterdata['userfieldvalue'] = $userfieldvalue;
 
-        $data = $datamanager->get_quiz_data($datalimit, $quizgradecolumn, $quiztimecolumn, $orderby, $userfilterdata);
+        $data = block_customleaderboard_get_quiz_data($datalimit, $quizgradecolumn, $quiztimecolumn, $orderby, $userfilterdata);
+        
         $usernamelabel = get_string('tblcourseleader:username', 'block_customleaderboard');
         $avgtimelabel = get_string('quiztable:avgtime', 'block_customleaderboard');
         $avggradelabel = get_string('quiztable:avggrade', 'block_customleaderboard');
@@ -163,7 +165,6 @@ class block_customleaderboard extends block_base {
      * @return String
      */
     public function make_discussion_post_table() {
-        $datamanager = new block_customleaderboard\external\datamanager();
         $datalimit = $this->config->datalimit;
         // User filter.
         $userfilter = $this->config->userfilter;
@@ -175,7 +176,7 @@ class block_customleaderboard extends block_base {
         $userfilterdata['userfield'] = $userfield;
         $userfilterdata['userfieldvalue'] = $userfieldvalue;
 
-        $data = $datamanager->get_discussion_post_data($datalimit, $userfilterdata);
+        $data = block_customleaderboard_get_discussion_post_data($datalimit, $userfilterdata);
 
         $userlabel = get_string('tblcourseleader:username', 'block_customleaderboard');
         $postlabel = get_string('tbldiscussion:postcount', 'block_customleaderboard');
@@ -201,7 +202,6 @@ class block_customleaderboard extends block_base {
      * @return String
      */
     public function make_course_leaderboard_table() {
-        $datamanager = new block_customleaderboard\external\datamanager();
         $datalimit = $this->config->datalimit;
         $courseid = $this->config->courseid;
         $coursedata = array();
@@ -216,7 +216,8 @@ class block_customleaderboard extends block_base {
                 $userfilterdata['userfilter'] = $userfilter;
                 $userfilterdata['userfield'] = $userfield;
                 $userfilterdata['userfieldvalue'] = $userfieldvalue;
-                $coursedata = $datamanager->get_course_leaderboard_data($courseid, $datalimit, $userfilterdata);
+                $coursedata = block_customleaderboard_get_course_leaderboard_data($courseid, $datalimit, $userfilterdata);
+            
             } else {
                 return get_string('leaderboardtypewarning', 'block_customleaderboard');
             }
@@ -236,7 +237,8 @@ class block_customleaderboard extends block_base {
             $table->head = $headings;
             $table->align = $align;
 
-            $cleandata = $datamanager->make_all_course_leaderboard_data($coursedata);
+            $cleandata = block_customleaderboard_make_all_course_leaderboard_data($coursedata);
+            
             foreach ($cleandata as $row) {
                 $grade = $this->round_two_decimal($row->grade);
                 $table->data[] = array ($row->display_name, $grade);
@@ -280,8 +282,8 @@ class block_customleaderboard extends block_base {
      */
     public function make_enrollment_table() {
         $datalimit = $this->config->datalimit;
-        $datamanager = new block_customleaderboard\external\datamanager();
-        $enrolldata = $datamanager->get_enrollment_data($datalimit);
+        $enrolldata = block_customleaderboard_get_enrollment_data($datalimit);
+        
         $coursenamelabel = get_string('tblenrollment:coursename', 'block_customleaderboard');
         $enrolleduserlabel = get_string('tblenrollment:enrollment', 'block_customleaderboard');
         $headings = array($coursenamelabel, $enrolleduserlabel);

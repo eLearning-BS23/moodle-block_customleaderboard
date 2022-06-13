@@ -109,6 +109,7 @@ class block_customleaderboard_edit_form extends block_edit_form {
         $mform->addElement('text', 'config_userfieldvalue',
         get_string('userfilter:fieldvalue', 'block_customleaderboard'));
         $mform->addElement('html', '</div>');
+        $mform->setType('config_userfieldvalue', PARAM_RAW);
         // End of user filter configs.
 
         $datalimitoptions = array();
